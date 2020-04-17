@@ -1,0 +1,16 @@
+import random
+
+cardfaces = []
+for i in range (0,10):
+  cardfaces.append(str(i))
+
+special_symbols=["cant_play","switch","+2"]
+
+for j in range (3):
+  cardfaces.append(special_symbols[j])
+
+
+colors=["red","blue","yellow","green"]
+
+
+#how do we do it for the black cards?
