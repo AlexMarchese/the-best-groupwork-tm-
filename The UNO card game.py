@@ -17,8 +17,9 @@ def distribute_cards():
 def lay_first_card():
     pass # Rule: first card cannot be +2, +4 or color change
 
-def beginner(): #this function serves to determine the beginner/starter of the game
-    pass
+def sequence_of_players(): #this function serves to determine the beginner/starter of the game and the order
+    pass    # output is: seq_of_ply (a list)
+
 
 def display_deck(): #this allows players to see what cards they have
     pass
@@ -45,6 +46,15 @@ def input_error():
 
 def play_the_game():
     pass    #this function serves to allow both types of players (normal user and computer) to play
+
+    seq_of_type_ply = [] # this list creates a sequence with all players per type (i.e. ['computer', 'ply'])
+    for i in range(len(seq_of_ply)):
+        if seq_of_ply[i] == 'computer':
+            seq_of_type_ply.append('computer')
+        else:
+            seq_of_type_ply.append('ply')
+
+    
 
 def display_the_winner():
     pass    # this function displays the winner once the game is over
@@ -75,6 +85,8 @@ def main():
     ply1 = ply1.lower() # this serves to convert the name into lowercase latters (in case it was entered \
     ply2 = ply2.lower() # in a messy way)
 
+    players = [ply1, ply2]
+
     one_more_game = 'yes'
     while one_more_game == 'yes':
 
@@ -84,7 +96,7 @@ def main():
 
         lay_first_card()
 
-        beginner()
+        sequence_of_players()
 
         play_the_game()
 
