@@ -13,12 +13,29 @@ def create_deck(): # Julia  input: none
 def shuffle_deck(deck): # Flurin 
     pass # output shuffled deck
 
+""""
+
 def distribute_cards(shuffled_deck):  # Nicola
     pass  # output: 2 list comp = [[],[]] and ply = [[],[]] !Warning please remove akso the 14 cards
             # shuffled_deck also to be returned 
 
+# .pop formula removes and returns specified seven cards_ply and cards_comp from shuffled_deck
+cards_ply = shuffled_deck.pop(0, 1, 2, 3, 4, 5, 6)
+cards_comp = shuffled_deck.pop(7, 8, 9, 10, 11, 12, 13)
+return shuffled_deck
+
+
 def lay_first_card(): # Nicola
     pass # Rule: first card cannot be +2, +4 or color change
+#.pop formula will remove and return a random first_card defined with random.choice from shuffled_deck
+first_card = shuffled_deck.pop(random.choice(shuffled_deck))
+#If first_card is +2, +4 or color_change, the function lay_first_card is to be repeated -->question: do I need to break the function when repeating?
+if str(first_card == "+2" or "+4" or "color_change"):
+    repeat(lay_first_card, 1)
+print(first_card)
+return shuffled_deck
+
+
 """
 def sequence_of_players(): #this function serves to determine the beginner/starter of the game and the order
     pass    # output is: seq_of_ply (a list)
