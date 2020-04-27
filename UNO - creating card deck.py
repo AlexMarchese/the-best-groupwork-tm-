@@ -15,14 +15,14 @@ colors=["red","blue","yellow","green"]
 
 for k in range (4):
     for l in range (13):
-        card=[cardfaces[l], colors[k]]
+        card=[colors[k],cardfaces[l]]
         deck.append(card)
 
 deck=deck*2
 
 #now let's add the wild cards
 
-wild_cards=[['+4','black'],['Choose_color','black']]*2
+wild_cards=[['black','+4'],['black','choose_color']]*2
 
 #print(wild_cards)
 
