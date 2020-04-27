@@ -1,5 +1,3 @@
-#UNO card game
-
 deck=[]
 
 cardfaces = []
@@ -11,39 +9,29 @@ special_symbols=["wait_a_round","switch","+2"]
 for j in range (3):
   cardfaces.append(special_symbols[j])
 
-#print(cardfaces)
-
 #now we have all the symbols together. let's pair them with the colors
 
 colors=["red","blue","yellow","green"]
 
 for k in range (4):
     for l in range (13):
-        card = (cardfaces[l]+" of "+ colors[k])
+        card=[cardfaces[l], colors[k]]
         deck.append(card)
 
-#print(deck)
+deck=deck*2
 
-#if you want to have all these cards double you just need to
-#multiply the deck like this:
+#now let's add the wild cards
 
-#deck=deck*2
-#print(deck)
+wild_cards=[['+4','black'],['Choose_color','black']]*2
 
-#so far so good, now I'm gonna add the black cards.
-wild_cards = ["+4 of black","choose a color"]*2
 #print(wild_cards)
-
-#adding the wild_cards to the deck:
 
 for a in range (4):
     deck.append(wild_cards[a])
 
 print("Final Card Deck:")
+print(deck)
 
-for c in range(56):
-    print(deck[c])
-
-
-#import random
-#random.shuffle(deck)
+#for visualizing all cards in one row:
+#for c in range(108):
+#    print(deck[c])
