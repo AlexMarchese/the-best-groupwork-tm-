@@ -85,10 +85,17 @@ for (i, item) in enumerate(name_cards_ply, start=0):
       # 4: +2 of green
       # 5: choose_color of black
       # 6: switch of yellow
-  
-#PLAY FIRST CARD
+
+#COMPUTER LAYS FIRST CARD
+first_card=shuffled_deck.pop(0)
+#print(first_card)
+print('The played card is ' +str(first_card[1])+' of '+str(first_card[0]))
+      
+#PLAYER PLAYS FIRST CARD
 
 card_played=int(input('Insert the number of the card you want to play: '))
 print("You played " + str(name_cards_ply[card_played]))
+
+#CAN YOU PLAY THAT? WRITE CODE FOR ERROR MESSAGE
 
 #REMOVE THAT CARD FROM YOUR CARDS
