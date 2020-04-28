@@ -34,7 +34,7 @@ for a in range (4):
 
 #SHUFFLE THE DECK
 def shuffle(deck):
-    shuffeld_deck = random.shuffle(deck)
+    shuffled_deck = random.shuffle(deck)
     return deck
 
 shuffled_deck = shuffle(deck)
@@ -43,7 +43,7 @@ shuffled_deck = shuffle(deck)
 cards_comp=shuffled_deck[0:7]
 cards_ply=shuffled_deck[7:14]
 
-#REMOVE THOSE 14 CARDS FROM THE DECK
+#REMOVE THOSE 14 CARDS FROM THE DECK -->Comment Nico: sollte es nicht ab 15 sein?
 shuffled_deck=shuffled_deck[14:]
 
 
