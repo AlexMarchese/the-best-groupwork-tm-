@@ -74,6 +74,10 @@ def choose_starter():
 
   return starter
 
+  def helly():
+    pass
+
+
 
 
 def display_player_cards(cards_ply):

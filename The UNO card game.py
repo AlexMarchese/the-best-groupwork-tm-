@@ -13,7 +13,7 @@ def create_deck(): # Julia  input: none
 def shuffle_deck(deck): # Flurin 
     pass # output shuffled deck
 
-""""
+
 
 def distribute_cards(shuffled_deck):  # Nicola
     pass  # output: 2 list comp = [[],[]] and ply = [[],[]] !Warning please remove akso the 14 cards
