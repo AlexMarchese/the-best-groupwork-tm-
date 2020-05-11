@@ -43,80 +43,295 @@ def create_deck():
 
 
 
-#SHUFFLE THE DECK
-def shuffle(deck):
-    shuffled_deck = random.shuffle(deck)
+def shuffle(deck):          
+    deck_to_sfuffle = deck.copy()  ### VERY IMPORTANT TO EXPLAIN THIS A MISTAKE HERE COSTED ME 6h OF WORK HAHAHA
+    random.shuffle(deck_to_sfuffle)
+    shuffled_deck = deck_to_sfuffle
     return shuffled_deck
 
 
 
-def lay_first_card(shuffled_deck):
+def lay_first_card(shuffled_deck): #check if card is effetively removed from deck
   x = shuffled_deck[0]
   shuffled_deck.remove(x)
   return x
 
+'''
+def card_laid(card_laid = first_card, first_card): #this serves to retreive the card which is currently laid down
+  if card_laid == first_card:
+    return first_card
+  else:                                       #Maybe not needed
+    return card_laid
+'''
 
 def distribute_cards(shuffled_deck):
 #DISTRIBUTE CARDS FROM SHUFFELED DECK
-  cards_comp = shuffled_deck[0:7]
-  cards_ply = shuffled_deck[7:14]
-
-#REMOVE THOSE 14 CARDS FROM THE DECK -->Comment Nico: sollte es nicht ab 15 sein?
+  cards_comp = shuffled_deck[0:7]   #change this -> use a for loop. The cards should be distributed as one each
+  cards_ply = shuffled_deck[7:14]   # this makes the game more realistic
   shuffled_deck = shuffled_deck[14:]
-  return cards_comp, cards_ply
+  return cards_comp, cards_ply, shuffled_deck
 
 def choose_starter():
   i = random.randrange(2)
   if i == 0:
-    starter = 'player'
-  else:
+    starter = 'player' #instead of player personalize it with the name
+  else:                # need to input the name in function
     starter = 'computer'
 
   return starter
 
-  def helly():
-    pass
+##### Till here the functions were used for the preparation of the game -> each is used once EXCEPTION: shuffle is used
+                                                      # for whenever cards of the shuffled deck are finished
 
+ 
 
+def display_player_cards(cards_ply):  #for now it is fine, let us improve it later
 
-
-def display_player_cards(cards_ply):
-
-  print('Your cards are: ')
+  print('Your cards are: ') #add also name as input, in order to personalize this
   name_cards_ply = []
   for i in cards_ply:
       new = (i[1]+' of '+ i[0])
       name_cards_ply.append(new)
 
+  cards = {}
+  
   for (i, item) in enumerate(name_cards_ply, start=0):
-      print(str(i) +': '+ str(item))
-    
-      #OUTPUT:
-      #Your cards are: 
-      # 0: 3 of green
-      # 1: switch of blue
-      # 2: 9 of green
-      # 3: +4 of black
-      # 4: +2 of green
-      # 5: choose_color of black
-      # 6: switch of yellow
+      cards[i] = item
+  return cards
 
-def comp_lays_card():
-  #COMPUTER LAYS FIRST CARD
-  first_card = shuffled_deck.pop(0)
-  #print(first_card)
-  print('The played card is ' + str(first_card[1]) + ' of ' + str(first_card[0]))
+def card_from_deck(shuffled_deck, num = 1):  #this function is used to take one or more cards from deck
+  
+  print('connection to function successful')
+  print('the lenght of shuffled deck now is: ', len(shuffled_deck))
+                             # default: it gives out one. If more are needed it has to be specified with the input
+  if len(shuffled_deck) == 0: # to check whether cards are effectively removed from shuffled deck
       
-#PLAYER PLAYS FIRST CARD
+    shuffled_deck = shuffle(deck) 
+    print('The deck was reshuffled. Its lenght is: ', len(shuffled_deck)) #maybe to be kept like this
+    #print(shuffled_deck)  
+  
+  if num == 1:
+    
+    x = shuffled_deck[0]
+    shuffled_deck.remove(x)
+    
+    return x, shuffled_deck
 
-def ply_lays_card():
+  else: #here actions for +2/+4 follow
+    pass #remeber to put break / y += 1 also after this
+    
+  
 
-  card_played = int(input('Insert the number of the card you want to play: '))
-  print("You played " + str(name_cards_ply[card_played]))
 
-#CAN YOU PLAY THAT? WRITE CODE FOR ERROR MESSAGE
 
-#REMOVE THAT CARD FROM YOUR CARDS
+def comp_lays_card(cards_comp, card_laid, shuffled_deck, color):  
+
+  print('card laid is: ', card_laid)
+  
+  if color != 'none':
+    card_laid = [color, ' ']
+    color = 'none'
+    #print('color gets considered')
+  #print('card laid is: ', card_laid)
+  cards_comp_temp = cards_comp.copy()
+  #print(len(cards_comp_temp))  # has to be removed after!!
+  error = 'No card can be played'
+  x = random.randrange(len(cards_comp_temp))
+  
+  card = cards_comp_temp[x]
+  while card[0] != card_laid[0] and card[1] != card_laid[1] and card[0] != 'black': 
+
+    if len(cards_comp_temp) == 0:
+      card = error
+      break
+
+    #elif card[0] == 'black':
+     # break
+
+    else:
+      x = random.randrange(len(cards_comp_temp))
+      card = cards_comp_temp[x]   
+      cards_comp_temp.remove(card)
+      #print('to check 1: ', card)
+      #print('to check remaining cards: ', cards_comp_temp)
+
+  #print('to check 2: ', card)
+
+  if card is not error:
+    cards_comp.remove(card)
+    
+    if card[0] != 'black':
+      print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))
+      card_laid = card
+
+    else:
+          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+          print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + 'with color ' + color)
+          card_laid = card
+    return cards_comp, card_laid, shuffled_deck, color
+
+  else:
+    print(card)
+    print('computer is taking a new card from deck')
+    
+        
+    card, shuffled_deck = card_from_deck(shuffled_deck)
+    
+    print('The card taken from deck is: ', card)
+    #print(card[0])
+    #print(card_laid[0])
+    #print(card_laid[1])
+
+    if card[0] == card_laid[0] or card[1] == card_laid[1]:
+        print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))
+        card_laid = card
+
+    elif card[0] == 'black':
+        
+          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+          print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + 'with color ' + color)
+          card_laid = card
+    else:
+        cards_comp.append(card)
+        print('computer can´t play. PASS')
+
+    return cards_comp, card_laid, shuffled_deck, color
+      
+
+
+def ply_lays_card(cards_ply, card_laid, shuffled_deck, color):  ### method is good, however it should do smth if it is not possible to lay down anything!!
+  
+ # card_played = int(input('Insert the number of the card you want to play: '))
+# print("You played " + str(name_cards_ply[card_played]))
+  # card_played = int(input('Insert the number of the card you want to play: '))
+# print("You played " + str(name_cards_ply[card_played]))
+
+  print('card laid is: ', card_laid)
+  
+  if color != 'none':
+    card_laid = [color, ' ']
+    color = 'none'
+
+  cards_ply_temp = cards_ply.copy()
+  
+  error = 'No card can be played'
+  x = random.randrange(len(cards_ply_temp))
+  
+  card = cards_ply_temp[x]
+  while card[0] != card_laid[0] and card[1] != card_laid[1] and card[0] != 'black': 
+
+    if len(cards_ply_temp) == 0:
+      card = error
+      break
+
+    #elif card[0] == 'black':
+     # break
+
+    else:
+      x = random.randrange(len(cards_ply_temp))
+      card = cards_ply_temp[x]   
+      cards_ply_temp.remove(card)
+      #print('to check 1: ', card)
+      #print('to check remaining cards: ', cards_ply_temp)
+
+  #print('to check 2: ', card)
+
+  if card is not error:
+    cards_ply.remove(card)
+    
+    if card[0] != 'black':
+      print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+      card_laid = card
+
+    else:
+          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+          print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]) + ' with color ' + color)
+          card_laid = card
+    return cards_ply, card_laid, shuffled_deck, color
+
+  else:
+    print(card)
+    print('player is taking a new card from deck')
+    
+        
+    card, shuffled_deck = card_from_deck(shuffled_deck)
+    
+    print('The card taken from deck is: ', card)
+    
+
+    if card[0] == card_laid[0] or card[1] == card_laid[1]:
+        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+        card_laid = card
+
+    elif card[0] == 'black':
+        
+          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+          print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]) + ' with color ' + color)
+          card_laid = card
+    else:
+        cards_ply.append(card)
+        print('player can´t play. PASS')
+
+    return cards_ply, card_laid, shuffled_deck, color
+      
+
+def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp): #to personalize with player name 
+
+  
+  if starter == 'player': 
+    print('###################################################')
+    cards_ply, card_laid, shuffled_deck, color = ply_lays_card(cards_ply, first_card, shuffled_deck, color='none')
+    print('--------------------------------------------------')
+    cards_comp, card_laid, shuffled_deck, color = comp_lays_card(cards_comp, card_laid, shuffled_deck, color)
+    mode = 1 #this says how the playing sequence is
+    print('###################################################')
+  else:
+    print('###################################################')
+    cards_comp, card_laid, shuffled_deck, color = comp_lays_card(cards_comp, first_card, shuffled_deck, color='none')
+    print('--------------------------------------------------')
+    cards_ply, card_laid, shuffled_deck, color = ply_lays_card(cards_ply, card_laid, shuffled_deck, color)
+    mode = 2
+    print('###################################################')
+
+  while True: #len(cards_comp) > 0 and len(cards_ply) > 0: # or whatever i.e. while True
+
+    if mode == 1:
+      if len(cards_ply) != 0:
+        cards_ply, card_laid, shuffled_deck, color = ply_lays_card(cards_ply, card_laid, shuffled_deck, color)
+      else:
+        print('player won!')
+        break
+
+      print('--------------------------------------------------')
+
+      if len(cards_comp) != 0:
+        cards_comp, card_laid, shuffled_deck, color = comp_lays_card(cards_comp, card_laid, shuffled_deck, color)
+      else:
+        print('computer won!') ##to add name -> personalize it
+        break
+      print('###################################################')
+    
+    else:
+      if len(cards_comp) != 0:
+        cards_comp, card_laid, shuffled_deck, color = comp_lays_card(cards_comp, card_laid, shuffled_deck, color)
+      else:
+        print('computer won!')
+        break
+      
+      print('--------------------------------------------------')
+
+      if len(cards_ply) != 0:
+        cards_ply, card_laid, shuffled_deck, color = ply_lays_card(cards_ply, card_laid, shuffled_deck, color)
+      else:
+        print('player won!')
+        break
+      print('###################################################')
+
+
+
+
+
+
 
 ########################################
 
@@ -124,6 +339,7 @@ def ply_lays_card():
 
 deck = create_deck()
 
+'''
 #WELCOME TO THE GAME
 name_ply = str(input("Welcome to this extremely fun UNO game! Please insert your name: "))
 welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)".format(name_ply)
@@ -141,14 +357,22 @@ print(rules)
 
 #READY MESSAGE
 Ready_message = str(input("{}, are you ready? ".format(name_ply)))
-print("Great, let's go.")
+print("Great, let's go.")   ### GAME HAS TO START JUST IF PLAYER TYPES YES !!!
+'''
 
 shuffled_deck = shuffle(deck)
+
 
 first_card = lay_first_card(shuffled_deck)
 print('The first card is: ', first_card)
 
-cards_comp, cards_ply = distribute_cards()
+
+cards_comp, cards_ply, shuffled_deck = distribute_cards(shuffled_deck)
+display_cards = display_player_cards(cards_ply)
+print(display_cards)
 
 starter = choose_starter()
-print('{}'.format(starter))
+print('{} starts'.format(starter))
+
+
+play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp)
