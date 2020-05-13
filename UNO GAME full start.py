@@ -1,6 +1,6 @@
 import random
 
-#CRATE DECK
+#CREATE DECK
 def create_deck():
   deck = []
 
@@ -138,7 +138,7 @@ def card_from_deck(shuffled_deck, num = 1):  #this function is used to take one 
 
 
   else: #here actions for +2/+4 follow
-    pass #remeber to put break / y += 1 also after this
+    pass #remember to put break / y += 1 also after this
     
   
 
@@ -175,6 +175,13 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):
     print('the playing direction has been switched, therefore player plays again')
     action = 'none'
     return cards_comp, card_laid, shuffled_deck, color, action 
+
+  if action == 'wait_a_round':
+    print('computer has been skipped, therefore player plays again')
+    action = 'none'
+    return cards_comp, card_laid, shuffled_deck, color, action 
+
+
 
     #print('color gets considered')
   #print('card laid is: ', card_laid)
@@ -309,6 +316,13 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
     print('the playing direction has been switched, therefore computer plays again')
     action = 'none'
     return cards_ply, card_laid, shuffled_deck, color, action 
+
+  if action == 'wait_a_round':
+    print('player has been skipped, therefore computer plays again')
+    action = 'none'
+    return cards_ply, card_laid, shuffled_deck, color, action 
+
+
 
   cards_ply_temp = cards_ply.copy()
   
