@@ -248,6 +248,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):
           print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + ' with desired color ' + color)
           card_laid = card
 
+          
           if card[1] == '+4':
             if type(action) == int:
               action += 4
@@ -383,12 +384,18 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
         action = 'wait_a_round'
 
     else:
+        while True:
           print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
           #print('Your chosen color is: ' + color)
           card_laid = card
-
-          if card[1] == '+4':
+          
+          if color != "green" and color != "yellow" and color != "blue" and color != "red":
+            print("That's not a valid color")
+            continue
+          else:
+            break
+        if card[1] == '+4':
             action = 4
 
     return cards_ply, card_laid, shuffled_deck, color, action
@@ -418,12 +425,19 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
 
     elif card[0] == 'black':
         
+        while True:
           print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
           #print('Your chosen color is: ' + color)
           card_laid = card
+          
+          if color != "green" and color != "yellow" and color != "blue" and color != "red":
+            print("That's not a valid color")
+            continue
+          else:
+            break
 
-          if card[1] == '+4':
+         if card[1] == '+4':
             action = 4
 
     else:
