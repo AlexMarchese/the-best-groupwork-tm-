@@ -437,7 +437,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
           else:
             break
 
-         if card[1] == '+4':
+        if card[1] == '+4':
             action = 4
 
     else:
