@@ -244,7 +244,6 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):
           else:
             color = 'red'
           
-          #color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
           print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + ' with desired color ' + color)
           card_laid = card
 
@@ -265,9 +264,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):
     card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
     
     print('The card taken from deck is: ', card)
-    #print(card[0])
-    #print(card_laid[0])
-    #print(card_laid[1])
+    
 
     if card[0] == card_laid[0] or card[1] == card_laid[1]:
         print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))
@@ -296,7 +293,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):
           else:
             color = 'red'
         
-          #color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+          
           print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + ' with desired color ' + color)
           card_laid = card
 
@@ -321,7 +318,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
   print('card laid is: ', card_laid)
   
   if color != 'none':
-    card_laid = [color, ' ']
+    card_laid = [color, ' '] # ' ' to be removed?
     color = 'none'
 
   if type(action) == int:
@@ -375,7 +372,10 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
       print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
       card_laid = card
       if card[1] == '+2':
-        action = 2
+        if type(action) == int:
+          action += 2
+        else:  
+          action = 2
       
       elif card[1] == 'switch':
           action = 'switch'
@@ -384,21 +384,25 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
         action = 'wait_a_round'
 
     else:
+        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
         while True:
-          print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+          
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
-          #print('Your chosen color is: ' + color)
           card_laid = card
           
           if color != "green" and color != "yellow" and color != "blue" and color != "red":
-            print("That's not a valid color")
+            print("That's not a valid color!")
             continue
           else:
             break
-        if card[1] == '+4':
-            action = 4
 
-    return cards_ply, card_laid, shuffled_deck, color, action
+        if card[1] == '+4':
+            if type(action) == int:
+              action += 4
+            else:  
+              action = 4
+
+    return cards_ply, card_laid, shuffled_deck, color, action 
 
   else:
     print(card)
@@ -425,14 +429,14 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  ### meth
 
     elif card[0] == 'black':
         
+        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
         while True:
-          print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+          
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
-          #print('Your chosen color is: ' + color)
           card_laid = card
           
           if color != "green" and color != "yellow" and color != "blue" and color != "red":
-            print("That's not a valid color")
+            print("That's not a valid color!")
             continue
           else:
             break
@@ -478,12 +482,16 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp): #to pe
       cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
       if len(cards_comp) == 0:
         return print('\ncomputer won!')
+      elif len(cards_comp) == 1:
+        print('\nUNO, computer has just one card left!\n') # this automatically prints UNO when the computer has just one card left
       print('###################################################')
     
     else:
       cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
       if len(cards_comp) == 0:
         return print('\ncomputer won!')
+      elif len(cards_comp) == 1:
+        print('\nUNO, computer has just one card left!\n') # this automatically prints UNO when the computer has just one card left
       
       print('--------------------------------------------------')
 
