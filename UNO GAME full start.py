@@ -141,6 +141,9 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
                            # WRITE ADDITIONAL OUTPUT !!!!!!!!!
   error = 'No card can be played'  # this is the error message in case no card can be laid 
 
+
+### checking whether the card plaid before is special. That means whether action is not 'none'. If so the special characteristics get executed
+
   if color != 'none':          # in case the color is not 'none' as by default, that means a black card was laid before (+4 or color change),
     card_laid = [color, ' ']   # the last card laid (this is taken as a reference for the card that can be laid on it) gets overwritten 
     color = 'none'             # with the previously selected color. After having done that the color = 'none' -> the player after has no restriction
@@ -172,18 +175,47 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
   elif action == 'switch':
     print('the playing direction has been switched, therefore player plays again') # in case the card played before is a 'switch' or
     action = 'none'                                                                # 'wait a round', the computer passes the turn to 
-    return cards_comp, card_laid, shuffled_deck, color, action                     # the player, without laying any card
+    return cards_comp, card_laid, shuffled_deck, color, action          # the player, without laying any card
 
   elif action == 'wait_a_round':
     print('computer has been skipped, therefore player plays again')
     action = 'none'
-    return cards_comp, card_laid, shuffled_deck, color, action 
+    return cards_comp, card_laid, shuffled_deck, color, action
+
+## Choosing a card to lay down (if not already chosen before, i.e. a +2 of same color or a +4)
+
+                              # as in the real game, when we play for instance with our friends, we (our group) agree on the fact that
+  special_cards = []          # it is not allowed to enter the game by a special card. That means the last card played cannot be
+  for i in cards_comp:        # 'switch', 'wait_a_round', '+2' or a black card. Therefore, this part here serves to make sure computer 
+    if i[1] == 'wait_a_round' or i[1] == 'switch' or i[1] == '+2' or i[0] == 'black':   # plays (in case he has one or more of them) the
+      special_cards.append(i)                                         # last of his special cards at latest in the potential prelast round
+  #print('checked how many special cards are left.') ##               # to make sure that, in case he gets to remain with just one card left,
+  #print('number of sp cards: ', len(special_cards)) ##               # that card is not a special one
+  #print('number of comp cards: ', len(cards_comp)) ##
 
 
-  if card == []:           # this serves to check, whether computer has already a card it can lay down (a +2 or a +4)
-                                              # if this is not the case, computer randomly chooses a card of his and checks if this can be
-    cards_comp_temp = cards_comp.copy()       # played. If it this is not the case, it tries to pick another one
+  if len(special_cards) == len(cards_comp) - 1 and len(special_cards) != 0:  
+    x = random.randrange(len(special_cards))
+    card = special_cards[x]
+    while card[0] != card_laid[0] and card[1] != card_laid[1] and card[0] != 'black':
+      if len(special_cards) == 0:
+        card = error
+        break
+      else:
+        x = random.randrange(len(special_cards)) 
+        card = special_cards[x]   
+        special_cards.remove(card)
+    print('successfully entered this scenario')
     
+  elif len(special_cards) == len(cards_comp):
+    card = error
+
+
+  elif card == []:           # this serves to check, whether computer has already a card it can lay down (either a +2 or a +4 he lays
+                                              # down in response to a previous +2 or +4 or he needs to get rid of a special card)
+                                              # if this is not the case, computer randomly chooses a card of his and checks if this can be
+                                              # played. If it this is not the case, it tries to pick another one
+    cards_comp_temp = cards_comp.copy()
     x = random.randrange(len(cards_comp_temp))
     
     card = cards_comp_temp[x]
@@ -198,8 +230,8 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
         card = cards_comp_temp[x]   
         cards_comp_temp.remove(card)  # card gets removed from the list of cards computer can still try
  
-  if card is not error:         # if a playable card was found, computer prints it 
-    cards_comp.remove(card)
+  if card is not error:         # if a playable card was found, computer prints it, 
+    cards_comp.remove(card)     # after having removed it from the cards of the computer
 
     if card[0] != 'black':    # it is important to distinguish between black cards and all other colors (as in case a black card is played
       print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))  # the desired color afterwards needs to be specified)
@@ -219,7 +251,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
       
     
     else:
-          x = random.randrange(4)   # omputer randomly chooses a color after he laid a black card
+          x = random.randrange(4)   # computer randomly chooses a color after he laid a black card
           if x == 0:
             color = 'green'
           elif x == 1:
@@ -240,6 +272,8 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
               action = 4
       
     return cards_comp, card_laid, shuffled_deck, color, action
+
+## error handling -> when the computer has no card it can lay
 
   else:
     print(card)
