@@ -470,25 +470,34 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     return cards_ply, card_laid, shuffled_deck, color, action
       
-                                                                              #to personalize with player name
-def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  # this function is responsible for the actual mechanisms of the game
+                                                                             
+def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  
+                                                # this function is responsible for the actual mechanisms of the game
                                                 # depending on the starter chosen randomly in the beginning, there is one or the other sequence
                                                 # this sequence remains the same troughout the game. The game continues, until somebody
   if starter == 'player':                       # (player or computer) causes the loop to be interrupted. That is the case when he remains 
                                                 # with 0 cards -> he won
-    print('###################################################')
+    #print('###################################################')
+    print('\n')
     cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, first_card, shuffled_deck, color='none', action='none')
+    print('\n')
     print('--------------------------------------------------')
+    print('\n')
     cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
     mode = 1 #this says how the playing sequence is
-    print('###################################################')
+    #print('###################################################')
+    print('\n')
   else:
-    print('###################################################')
+    #print('###################################################')
+    print('\n')
     cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, first_card, shuffled_deck, color='none', action='none')
+    print('\n')
     print('--------------------------------------------------')
+    print('\n')
     cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
     mode = 2
-    print('###################################################')
+    #print('###################################################')
+    print('\n')
 
   while True: #len(cards_comp) > 0 and len(cards_ply) > 0: # or whatever i.e. while True
 
@@ -496,32 +505,45 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  # thi
       
       cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)  
       if len(cards_ply) == 0:
-        return print('\nCongratulations ' + str(player_name) + '! You have won!')  
+        winner = 'ply'
+        print('\nCongratulations ' + str(player_name) + '! You have won!')
+        return winner  
        
+      print('\n')
       print('--------------------------------------------------')
+      print('\n')
 
       cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
       if len(cards_comp) == 0:
-        return print('\ncomputer won!')
+        winner = 'comp'
+        print('\ncomputer won!')
+        return winner
       elif len(cards_comp) == 1:
         print('\nUNO, computer has just one card left!\n') # this automatically prints UNO when the computer has just one card left
-      print('###################################################')
+      #print('###################################################')
+      print('\n')
     
     else:
       cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
       if len(cards_comp) == 0:
-        return print('\ncomputer won!')
+        winner = 'comp'
+        print('\ncomputer won!')
+        return winner
       elif len(cards_comp) == 1:
         print('\nUNO, computer has just one card left!\n') # this automatically prints UNO when the computer has just one card left
       
+      print('\n')
       print('--------------------------------------------------')
+      print('\n')
 
       cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
       if len(cards_ply) == 0:
-        return print('\nCongratulations ' + str(player_name) + '! You have won!')
+        winner = 'ply'
+        print('\nCongratulations ' + str(player_name) + '! You have won!')
+        return winner
         
-      print('###################################################')
-
+      #print('###################################################')
+      print('\n')
 
 
 
@@ -556,19 +578,39 @@ Ready_message = str(input("{}, are you ready? ".format(name_ply)))
 print("Great, let's go.")   ### GAME HAS TO START JUST IF PLAYER TYPES YES !!!
 '''
 
-shuffled_deck = shuffle(deck)
+wins_ply = 0
+wins_comp = 0
 
 
-first_card = lay_first_card(shuffled_deck)
-print('The first card is: ', first_card)
+play = 'yes' 
+while play == 'yes':
+
+  shuffled_deck = shuffle(deck)
 
 
-cards_comp, cards_ply, shuffled_deck = distribute_cards(shuffled_deck)
-display_cards = display_player_cards(cards_ply)
-print(display_cards)
-
-starter = choose_starter()
-print('{} starts'.format(starter))
+  first_card = lay_first_card(shuffled_deck)
+  print('The first card is: ', first_card)
 
 
-play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp)
+  cards_comp, cards_ply, shuffled_deck = distribute_cards(shuffled_deck)
+  display_cards = display_player_cards(cards_ply)
+  print(display_cards)
+
+  starter = choose_starter()
+  print('{} starts'.format(starter))
+
+
+  winner = play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp)
+  
+  if winner == 'ply':
+    wins_ply += 1
+  else:
+    wins_comp += 1
+  
+
+  play = input('\nGame has ended. Do you want to play again?\nIf so just type "yes".\nYour choice: ')
+  
+
+print('That does not seem to be the case')
+print('\nThese are the results:\n-> {} won {} time(s)\n-> computer won {} time(s)'.format(player_name, wins_ply, wins_comp))
+print('\nHave a nice day and see you soon!')
