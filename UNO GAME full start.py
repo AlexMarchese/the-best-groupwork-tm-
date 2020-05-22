@@ -1,7 +1,13 @@
 import random
 
+print('Welcome to a game of UNO! Whats your name?')
+
+player_name = input()
+
+print('Hello ' + str(player_name) + '! We wish you good luck and have fun playing!')
+
 #CREATE DECK
-def create_deck(): # this function creates the deck from scratch and returns itv as deck
+def create_deck(): # this function creates the deck from scratch and returns it as deck
   deck = []
 
   colors = ['red', 'green', 'yellow', 'blue', 'black']
@@ -173,12 +179,12 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
 
 
   elif action == 'switch':
-    print('the playing direction has been switched, therefore player plays again') # in case the card played before is a 'switch' or
+    print('the playing direction has been switched, therefore you play again') # in case the card played before is a 'switch' or
     action = 'none'                                                                # 'wait a round', the computer passes the turn to 
     return cards_comp, card_laid, shuffled_deck, color, action          # the player, without laying any card
 
   elif action == 'wait_a_round':
-    print('computer has been skipped, therefore player plays again')
+    print('computer has been skipped, therefore you play again')
     action = 'none'
     return cards_comp, card_laid, shuffled_deck, color, action
 
@@ -341,7 +347,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
     color = 'none'
 
   if type(action) == int:
-    print('player receives +{} additional cards'.format(action))
+    print('you receive +{} additional cards'.format(action))
     new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, action)
     for i in new_cards:
       cards_ply.append(i)
@@ -354,7 +360,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
     return cards_ply, card_laid, shuffled_deck, color, action 
 
   elif action == 'wait_a_round':
-    print('player has been skipped, therefore computer plays again')
+    print('you have been skipped, therefore computer plays again')
     action = 'none'
     return cards_ply, card_laid, shuffled_deck, color, action 
 
@@ -388,7 +394,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
     cards_ply.remove(card)
     
     if card[0] != 'black':
-      print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+      print('The card played by '+ str(player_name) +' is ' + str(card[1]) + ' of ' + str(card[0]))
       card_laid = card
       if card[1] == '+2':
         if type(action) == int:
@@ -403,7 +409,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
         action = 'wait_a_round'
 
     else:
-        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+        print('The card played by '+ str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
         while True:
           
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
@@ -425,7 +431,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
   else:
     print(card)
-    print('player is taking a new card from deck')
+    print(str(player_name) + ' is taking a new card from deck')
     
         
     card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
@@ -434,7 +440,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
     
 
     if card[0] == card_laid[0] or card[1] == card_laid[1]:
-        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+        print('The card played by ' + str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
         card_laid = card
 
         if card[1] == '+2':
@@ -448,7 +454,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     elif card[0] == 'black':
         
-        print('The played card by player is ' + str(card[1]) + ' of ' + str(card[0]))
+        print('The card played by ' + str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
         while True:
           
           color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
@@ -465,7 +471,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     else:
         cards_ply.append(card)
-        print('player can´t play. PASS')
+        print('You can´t play. PASS')
 
     return cards_ply, card_laid, shuffled_deck, color, action
       
@@ -495,7 +501,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  # thi
       
       cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)  
       if len(cards_ply) == 0:
-        return print('\nplayer won!')  
+        return print('\nCongratulations ' + str(player_name) + '! You have won!')  
        
       print('--------------------------------------------------')
 
@@ -517,7 +523,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  # thi
 
       cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
       if len(cards_ply) == 0:
-        return print('\nplayer won!')
+        return print('\nCongratulations ' + str(player_name) + '! You have won!')
         
       print('###################################################')
 
