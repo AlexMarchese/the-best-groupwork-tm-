@@ -1,10 +1,6 @@
 import random
 
-print('Welcome to a game of UNO! Whats your name?')
 
-player_name = input()
-
-print('Hello ' + str(player_name) + '! We wish you good luck and have fun playing!')
 
 #CREATE DECK
 def create_deck(): # this function creates the deck from scratch and returns it as deck
@@ -144,7 +140,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
   print('card laid is: ', card_laid)    # the shuffled deck, the color (it is 'none' by default and specified if the person before laid                     
                                         # a +4 black or a color change black) and the action (it is also by default 'none' and specified
   card = []                             # with the numbers of cards to be taken from deck if the player(s) before laid one / multiple +2 / +4)
-                           # WRITE ADDITIONAL OUTPUT !!!!!!!!!
+                           
   error = 'No card can be played'  # this is the error message in case no card can be laid 
 
 
@@ -155,9 +151,8 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
     color = 'none'             # with the previously selected color. After having done that the color = 'none' -> the player after has no restriction
 
   if type(action) == int:                               # this checks whether action is not 'none'. This is the case when the player before 
-    print('The cards of the computer: ', cards_comp)    # laid a +2 / +4 
-    cards_to_answer = []
-    for i in cards_comp:                                # the computer checks whether it can answer by also playing a +2 of the same (or the 
+    cards_to_answer = []                                # laid a +2 / +4 
+    for i in cards_comp:                                # The computer checks whether it can answer by also playing a +2 of the same (or the 
                                                         # deisred) color or a +4. If that is the case computer plays it (or randomly one 
       if i[0] == card_laid[0] and i[1] == '+2' or i[1] == '+4':   # of the possible ones, in case of multiple possibilities)
         cards_to_answer.append(i)
@@ -539,12 +534,13 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  # thi
 
 deck = create_deck()
 
-'''
+
 #WELCOME TO THE GAME
-name_ply = str(input("Welcome to this extremely fun UNO game! Please insert your name: "))
-welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)".format(name_ply)
+player_name = str(input("Welcome to this extremely fun UNO game! Please insert your name: "))
+welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)".format(player_name)
 print(welcome_message)
 
+'''
 #THE RULES
 rules = """You will play against me, the computer. I changed some rules to make it easier for the both of us.
 - Everyone starts with 7 cards.
