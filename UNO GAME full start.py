@@ -206,7 +206,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
         x = random.randrange(len(special_cards)) 
         card = special_cards[x]   
         special_cards.remove(card)
-    print('successfully entered this scenario')
+    #print('successfully entered this scenario') 
     
   elif len(special_cards) == len(cards_comp):
     card = error
@@ -401,7 +401,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
       else:
         
         if x == 'take':
-          print('You can either play or still need to take cards from deck')
+          print('You can either play or still need to take cards from deck.')
           continue
 
         elif x == 'take cards':
@@ -432,46 +432,46 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
 
     while True:
       
-        x = input('Insert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
-  or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
-        
-        if len(x) == 1:
-          x = int(x)
-          if 0 <= x < len(cards_ply): 
-            card = cards_ply[x]
-            print('Your chosen card is ' + str(card[1]) + ' of ' + str(card[0]))
-            if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
-              
-              cards_ply.remove(card)   #  removes played card 
-              #print(cards_ply)
-              break
-            else:
-              print('This card can´t be played')
-              continue
-
-          else:
-            print('This input is not valid. Try again.')
-            continue
-        else:
-          if x == 'take':
-            card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
-            print('The card taken from deck is: ', card)
-            if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
-              print('The taken card could be laid successfully.')
-              
-            else:
-              print('Also the new card could not be played, therefore you have to pass')
-              cards_ply.append(card)
-              card = error
+      x = input('Insert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
+or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
+      
+      if len(x) == 1:
+        x = int(x)
+        if 0 <= x < len(cards_ply): 
+          card = cards_ply[x]
+          print('Your chosen card is ' + str(card[1]) + ' of ' + str(card[0]))
+          if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
+            
+            cards_ply.remove(card)   #  removes played card 
+            #print(cards_ply)
             break
-
-          elif x == 'take cards':
-            print('This input does not make sense here, as no +2/+4 has/have been played before or the cards have already been collected!')
-            continue
-
           else:
-            print('This input is not valid. Try again.')
+            print('This card can´t be played')
             continue
+
+        else:
+          print('This input is not valid. Try again.')
+          continue
+      else:
+        if x == 'take':
+          card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
+          print('The card taken from deck is: ', card)
+          if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
+            print('The taken card could be laid successfully.')
+            
+          else:
+            print('Also the new card could not be played, therefore you have to pass')
+            cards_ply.append(card)
+            card = error
+          break
+
+        elif x == 'take cards':
+          print('This input does not make sense here, as no +2/+4 has/have been played before or the cards have already been collected!')
+          continue
+
+        else:
+          print('This input is not valid. Try again.')
+          continue
     
   if card == error:
     return cards_ply, card_laid, shuffled_deck, color, action
@@ -507,6 +507,22 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
               action += 4
             else:  
               action = 4
+
+  if len(cards_ply) == 0:
+
+    if card[1] == 'wait_a_round' or card[1] == 'switch' or card[1] == '+2' or card[0] == 'black':
+      print('You are not allowed to end the game with a special card! \nThis cards gets played as wanted, however\
+as punishement you get two additional cards!')
+      
+      new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, 2)
+      for i in new_cards:
+        cards_ply.append(i)
+      print('additional cards received are: ', new_cards)
+
+    else: # just for debugging!!!!!!!
+      print('Last card rule correctly respected')
+      
+
 
   
   card_laid = card
