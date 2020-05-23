@@ -91,6 +91,17 @@ def display_player_cards(cards_ply):  # this function serves to tell the player 
       cards[i] = item
   return cards
 
+def display_addit_cards_received(new_cards): # this function serves to print the cards, after they are taken from deck, in a nicer way
+                                             # it is also used to display the first card that is laid (very first card to start the game)
+  show = []
+  if len(new_cards) == 2:
+    return '"{} of {}"'.format(new_cards[1], new_cards[0])
+  else:
+    for i in new_cards:
+      card = '{} of {}'.format(i[1], i[0])
+      show.append(card)
+    return show
+
 
 def card_from_deck(shuffled_deck, card_laid, num = 1):  # this function is used to take one or more cards from deck
                                     # default: it gives out one. If more are needed it has to be specified with the input (the num)
@@ -137,7 +148,7 @@ def card_from_deck(shuffled_deck, card_laid, num = 1):  # this function is used 
 
 def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this function determines how the computer plays at every turn
                                         # input parameters are respectively: the cards of the computer, the last card laid,
-  print('card laid is: ', card_laid)    # the shuffled deck, the color (it is 'none' by default and specified if the person before laid                     
+  #print('card laid is: ', card_laid)   # the shuffled deck, the color (it is 'none' by default and specified if the person before laid                     
                                         # a +4 black or a color change black) and the action (it is also by default 'none' and specified
   card = []                             # with the numbers of cards to be taken from deck if the player(s) before laid one / multiple +2 / +4)
                            
@@ -154,7 +165,8 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
     cards_to_answer = []                                # laid a +2 / +4 
     for i in cards_comp:                                # The computer checks whether it can answer by also playing a +2 of the same (or the 
                                                         # deisred) color or a +4. If that is the case computer plays it (or randomly one 
-      if i[0] == card_laid[0] and i[1] == '+2' or i[1] == '+4':   # of the possible ones, in case of multiple possibilities)
+                                                        # of the possible ones, in case of multiple possibilities)
+      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[0] != 'black' and i[1] == '+2':
         cards_to_answer.append(i)
     if len(cards_to_answer) != 0:
       x = random.randrange(len(cards_to_answer))
@@ -167,7 +179,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
       for i in new_cards:
         cards_comp.append(i)
       action = 'none'                                      # also here, after the specified action parameter did his function, it gets changed
-      print('additional cards received are: ', new_cards)  # to 'none' again
+      #print('additional cards received are: ', new_cards)  # to 'none' again
 
     #print('different cards to answer: ', cards_to_answer)
     #print('card to answer is: ', card)
@@ -235,7 +247,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
     cards_comp.remove(card)     # after having removed it from the cards of the computer
 
     if card[0] != 'black':    # it is important to distinguish between black cards and all other colors (as in case a black card is played
-      print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))  # the desired color afterwards needs to be specified)
+      print('The played card by computer is "' + str(card[1]) + ' of ' + str(card[0]) +'"')  # the desired color afterwards needs to be specified)
       card_laid = card
 
       if card[1] == '+2':           # if card is a +2 the action (which is transmitted to the following player) becomes 2
@@ -262,7 +274,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
           else:
             color = 'red'
           
-          print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + ' with desired color ' + color)
+          print('The played card by computer is "' + str(card[1]) + ' of ' + str(card[0]) + '" with desired color "' + color + '"')
           card_laid = card
 
           
@@ -283,11 +295,11 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
                                                         # before), the computer lays it or declares 'PASS' and the turn gets passed over
     card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
     
-    print('The card taken from deck is: ', card)
+    #print('The card taken from deck is: ', card)
     
 
     if card[0] == card_laid[0] or card[1] == card_laid[1]:
-        print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]))
+        print('The played card by computer is "' + str(card[1]) + ' of ' + str(card[0]) + '"')
         card_laid = card
 
         if card[1] == '+2':
@@ -314,7 +326,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
             color = 'red'
         
           
-          print('The played card by computer is ' + str(card[1]) + ' of ' + str(card[0]) + ' with desired color ' + color)
+          print('The played card by computer is "' + str(card[1]) + ' of ' + str(card[0]) + '" with desired color "' + color + '"')
           card_laid = card
 
           if card[1] == '+4':
@@ -335,7 +347,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
   # card_played = int(input('Insert the number of the card you want to play: '))
 # print("You played " + str(name_cards_ply[card_played]))
 
-  print('card laid is: ', card_laid)
+  #print('card laid is: ', card_laid)
     
   if color != 'none':
     card_laid = [color, ' '] # ' ' to be removed?
@@ -362,7 +374,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     cards_to_answer = []
     for i in cards_ply:
-      if i[1] == 'black' or i[0] == '+2' and i[1] == card_laid[1]:
+      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[0] != 'black' and i[1] == '+2':  # control this
         cards_to_answer.append(i)
     print('Checking possible cards to answer:', cards_to_answer) ### just for debugging
 
@@ -371,14 +383,14 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     while True:
     
-      x = input('Insert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
+      x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
       if len(x) == 1:
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
-          print('Your chosen card is ' + str(card[1]) + ' of ' + str(card[0]))
+          print('Your chosen card is "' + str(card[1]) + ' of ' + str(card[0]) + '"')
           if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
 
             if card in cards_to_answer:
@@ -411,7 +423,8 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           for i in new_cards:
             cards_ply.append(i)
           action = 'none'
-          print('additional cards received are: ', new_cards)
+          new_cards_pr = display_addit_cards_received(new_cards)
+          print('additional cards received are: ', new_cards_pr)
           break
 
         else:
@@ -432,14 +445,14 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
 
     while True:
       
-      x = input('Insert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
+      x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
       if len(x) == 1:
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
-          print('Your chosen card is ' + str(card[1]) + ' of ' + str(card[0]))
+          print('Your chosen card is "' + str(card[1]) + ' of ' + str(card[0]) + '"')
           if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
             
             cards_ply.remove(card)   #  removes played card 
@@ -455,7 +468,8 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
       else:
         if x == 'take':
           card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
-          print('The card taken from deck is: ', card)
+          card_pr = display_addit_cards_received(card)
+          print('The card taken from deck is: ', card_pr)
           if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
             print('The taken card could be laid successfully.')
             
@@ -511,13 +525,14 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
   if len(cards_ply) == 0:
 
     if card[1] == 'wait_a_round' or card[1] == 'switch' or card[1] == '+2' or card[0] == 'black':
-      print('You are not allowed to end the game with a special card! \nThis cards gets played as wanted, however\
+      print('You are not allowed to end the game with a special card! \nThis cards gets played as wanted, however \
 as punishement you get two additional cards!')
       
       new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, 2)
       for i in new_cards:
         cards_ply.append(i)
-      print('additional cards received are: ', new_cards)
+      new_cards_pr = display_addit_cards_received(new_cards)
+      print('additional cards received are: ', new_cards_pr)
 
     else: # just for debugging!!!!!!!
       print('Last card rule correctly respected')
@@ -544,8 +559,8 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
     print('\n')
     cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, first_card, shuffled_deck, color='none', action='none')
     print('\n')
-    print('--------------------------------------------------')
-    print('\n')
+    #print('--------------------------------------------------')
+    #print('\n')
     cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
     mode = 1 #this says how the playing sequence is
     #print('###################################################')
@@ -555,8 +570,8 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
     print('\n')
     cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, first_card, shuffled_deck, color='none', action='none')
     print('\n')
-    print('--------------------------------------------------')
-    print('\n')
+    #print('--------------------------------------------------')
+    #print('\n')
     cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
     mode = 2
     #print('###################################################')
@@ -573,8 +588,8 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
         return winner  
        
       print('\n')
-      print('--------------------------------------------------')
-      print('\n')
+      #print('--------------------------------------------------')
+      #print('\n')
 
       cards_comp, card_laid, shuffled_deck, color, action = comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action)
       if len(cards_comp) == 0:
@@ -596,8 +611,8 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
         print('\nUNO, computer has just one card left!\n') # this automatically prints UNO when the computer has just one card left
       
       print('\n')
-      print('--------------------------------------------------')
-      print('\n')
+      #print('--------------------------------------------------')
+      #print('\n')
 
       cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
       if len(cards_ply) == 0:
@@ -621,8 +636,8 @@ deck = create_deck()
 
 
 #WELCOME TO THE GAME
-player_name = str(input("Welcome to this extremely fun UNO game! Please insert your name: "))
-welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)".format(player_name)
+player_name = str(input("\nWelcome to this extremely fun UNO game! Please insert your name: "))
+welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)\n".format(player_name)
 print(welcome_message)
 
 '''
@@ -652,7 +667,11 @@ while play == 'yes':
 
 
   first_card = lay_first_card(shuffled_deck)
-  print('The first card is: ', first_card)
+
+  #print('The first card is: ', first_card)
+
+  first_card_pr = display_addit_cards_received(first_card)
+  print('\nThe first card is: ', first_card_pr)
 
 
   cards_comp, cards_ply, shuffled_deck = distribute_cards(shuffled_deck)
@@ -660,7 +679,7 @@ while play == 'yes':
   print(display_cards)
 
   starter = choose_starter()
-  print('{} starts'.format(starter))
+  print('\n{} starts'.format(starter))
 
 
   winner = play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp)
