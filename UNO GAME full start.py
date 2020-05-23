@@ -166,7 +166,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
     for i in cards_comp:                                # The computer checks whether it can answer by also playing a +2 of the same (or the 
                                                         # deisred) color or a +4. If that is the case computer plays it (or randomly one 
                                                         # of the possible ones, in case of multiple possibilities)
-      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[0] != 'black' and i[1] == '+2':
+      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[1] == '+2' and i[1] == '+2':
         cards_to_answer.append(i)
     if len(cards_to_answer) != 0:
       x = random.randrange(len(cards_to_answer))
@@ -374,7 +374,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 
     cards_to_answer = []
     for i in cards_ply:
-      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[0] != 'black' and i[1] == '+2':  # control this
+      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[1] == '+2' and i[1] == '+2':  # control this
         cards_to_answer.append(i)
     print('Checking possible cards to answer:', cards_to_answer) ### just for debugging
 
@@ -386,7 +386,7 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      if len(x) == 1:
+      if len(x) == 1 or len(x) == 2:
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
@@ -448,7 +448,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      if len(x) == 1:
+      if len(x) == 1 or len(x) == 2:
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
