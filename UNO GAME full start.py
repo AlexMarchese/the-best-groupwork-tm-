@@ -58,8 +58,8 @@ def lay_first_card(shuffled_deck): # this function takes the first card from the
 
 def distribute_cards(shuffled_deck): # this function gives each player 7 cards from the shuffled deck
 
-  cards_comp = shuffled_deck[0:7]   # 7:14
-  cards_ply = shuffled_deck[7:9]  
+  cards_comp = shuffled_deck[0:7]  
+  cards_ply = shuffled_deck[7:14]  
   shuffled_deck = shuffled_deck[14:]   
   return cards_comp, cards_ply, shuffled_deck
 
@@ -362,10 +362,10 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
       
 
 
-def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):  
+def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):  # this function represents how the player plays at every turn
 
 
-  if len(cards_ply) == 1:
+  if len(cards_ply) == 1:     # this is used to punish the player with +2 cards, if he forgot to say 'UNO' (check also further parts in this function)
     if last != 'UNO':
       print('You did not say UNO! As punishement you receive two additional cards')
       new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, 2)
@@ -374,10 +374,9 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):
       new_cards_pr = display_addit_cards_received(new_cards)
       print('additional cards received are: ', new_cards_pr)
 
-    else:
-      print('You said UNO successfully') #just to debug
+    
   
-  if color != 'none':
+  if color != 'none':                # these following actions are all as described in comp_lays_card function
     card_laid = [color, ' '] 
     color = 'none'
 
@@ -398,8 +397,8 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):
 
   last_maybe = ''
 
-  if type(action) == int:
-
+  if type(action) == int:   # this big part is entered if in the turn before one/multiple +2/+4 was/were laid. With this player has the 
+                                    # possibility to also answer with such a card
     cards_to_answer = []
     for i in cards_ply:
       if i[1] == '+4' or (i[0] == card_laid[0] and i[1] == '+2') or (card_laid[1] == '+2' and i[1] == '+2'):  # control this
@@ -407,17 +406,14 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):
     #print('Checking possible cards to answer:', cards_to_answer) ### just for debugging
 
 
-    
-
-    
-    while True:
-
+    while True:   # the whole loop can be exited either when chooses to play a +2/+4 to answer (if he has one) or he writes 'take cards' and
+                                                                  # collects the cards
       print(display_player_cards(cards_ply))
-      print('The last laid card is: ', display_addit_cards_received(card_laid))
+      print('The last laid card is: ', display_addit_cards_received([card_laid]) if card_laid[1].strip() else card_laid[0])
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      if len(cards_ply) == 2 and not x in ['take cards', 'take']  and not x.isdigit():
+      if len(cards_ply) == 2 and not x in ['take cards', 'take']  and not x.isdigit():   # this is used to give player the possibility to say UNO
         y = x.split(' ')
         if len(y) == 2 and y[0].isdigit() and y[1] == 'UNO':
           last_maybe = 'UNO'
@@ -427,8 +423,8 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           continue
 
 
-      if x.isdigit():
-        x = int(x)
+      if x.isdigit():                   # if he entered a correct number corresponding to a card of the dictionary displayed, this gets checked
+        x = int(x)                      # if this card can be played, it gets assigned to card and removed
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
           print('Your chosen card is "' + str(card[1]) + ' of ' + str(card[0]) + '"')
@@ -439,7 +435,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
               break
 
             else:
-              print('You first have to take the cards from deck!! Type "take cards".')
+              print('You first have to take the cards from deck!! Type "take cards".') 
               card = []
               continue
             
@@ -457,7 +453,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           print('You can either play or still need to take cards from deck.')
           continue
 
-        elif x == 'take cards':
+        elif x == 'take cards':   # when take cards is typed the cards are taken from deck
           
           print('you receive +{} additional cards'.format(action))
           new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, action)
@@ -473,21 +469,17 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           continue
 
 
-
-  
-  
-
   
 
   error = 'No card can be played'
   #print(display_player_cards(cards_ply))
 
-  if card == []:
+  if card == []: # this part with its True loop gets entered if computer had no +2/+4 to answer or no such card was laid before
 
-    while True:
+    while True:  # the loop ends after computer plaid a card successfully or had to pass
       
       print(display_player_cards(cards_ply))
-      print('The last laid card is: ', display_addit_cards_received(card_laid))
+      print('The last laid card is: ', display_addit_cards_received([card_laid]) if card_laid[1].strip() else card_laid[0])
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
@@ -524,7 +516,9 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           print('The card taken from deck is: ', card_pr)
           if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
             print('The taken card could be laid successfully.')
-            
+            if len(cards_ply) == 1:
+              last_maybe = 'UNO'
+
           else:
             print('Also the new card could not be played, therefore you have to pass')
             cards_ply.append(card)
@@ -539,7 +533,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           print('This input is not valid. Try again.')
           continue
     
-  if card == error:
+  if card == error:                                                      # for information about this part check the function comp_lays_card
     return cards_ply, card_laid, shuffled_deck, color, action, last
 
   if card[0] != 'black':
@@ -700,21 +694,27 @@ player_name = str(input("\nWelcome to this extremely fun UNO game! Please insert
 welcome_message = "Hello {}! Thank you for playing with me. I swear I won't cheat :)\n".format(player_name)
 print(welcome_message)
 
-'''
-#THE RULES
-rules = """You will play against me, the computer. I changed some rules to make it easier for the both of us.
-- Everyone starts with 7 cards.
-- You can start with every card you want.
-- We can not play double cards.
-- We can not turn two +2 into a +4.
-- We can play every card at the end.
-- Me, the computer, will say UNO for you, because I can't hear you."""
-print(rules)
+print("""
+You will play against me, the computer. Before starting to play, please make yourself familiar with the rules of this game.
 
-#READY MESSAGE
-Ready_message = str(input("{}, are you ready? ".format(name_ply)))
-print("Great, let's go.")   ### GAME HAS TO START JUST IF PLAYER TYPES YES !!!
-'''
+THE RULES:
+
+- Everyone starts with 7 cards
+- You can lay down a card if it has the same sign or the same color as the card laid before.
+- Black cards (‘+4’ and ‘choose color’) can be played after every card
+- After playing a ‘wait a round’ and ‘switch’ card you can lay down another card.
+- If you have two cards with the same number AND the same color, you can lay them down at the same time.
+- If one player lays down a ‘draw’ card (e.g. ‘+2’), the other player can answer by also laying down a ‘draw’ card (e.g. ‘+4). In this case the first player has to take the sum of the ‘draw’ cards (e.g. ‘+6’).
+- If you have one card left you have to say UNO. If you don’t say UNO you get 2 more cards.
+- The last card played can NOT be a ‘switch’, ‘wait a round’, ‘+2’, ‘+4’, or ‘choose color’. If you try to play one of these cards at the end you get 2 more cards.
+
+HOW TO PLAY:
+
+- To play a card, enter the number of the card you want to play (e.g. if you want to play 1: ‘5 of yellow’ enter ‘1’)
+- If you can’t play any of your cards, take a card from the deck by entering ‘take’
+- If you have to take cards because of a +2 or a +4, enter ‘take cards’
+- If you have two cards left and you want to put down one card you have to enter the number of the card and the word ‘UNO’ with a space in between (e.g. ‘1 UNO’)
+""")
 
 wins_ply = 0
 wins_comp = 0
