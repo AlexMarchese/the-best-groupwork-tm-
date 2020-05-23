@@ -336,20 +336,13 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
 # print("You played " + str(name_cards_ply[card_played]))
 
   print('card laid is: ', card_laid)
-  
+    
   if color != 'none':
     card_laid = [color, ' '] # ' ' to be removed?
     color = 'none'
 
-  if type(action) == int:
-    print('you receive +{} additional cards'.format(action))
-    new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, action)
-    for i in new_cards:
-      cards_ply.append(i)
-    action = 'none'
-    print('additional cards received are: ', new_cards)
  
-  elif action == 'switch':
+  if action == 'switch':
     print('the playing direction has been switched, therefore computer plays again')
     action = 'none'
     return cards_ply, card_laid, shuffled_deck, color, action 
@@ -359,116 +352,119 @@ def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):
     action = 'none'
     return cards_ply, card_laid, shuffled_deck, color, action 
 
+  print(display_player_cards(cards_ply))
 
+  '''
 
-  cards_ply_temp = cards_ply.copy()
+  cards_to_answer = []
+  for i in cards_ply:
+    if i[1] == 'black' or i[0] == '+2' and i[1] == card_laid[1]:
+      cards_to_answer.append(i)
+  if len(cards_to_answer) != 0:
+
   
+  '''
+
+ 
+  
+  #if card[0] != 'black' and card[1] != '+2':
+
+  if type(action) == int:
+    print('you receive +{} additional cards'.format(action))
+    new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, action)
+    for i in new_cards:
+      cards_ply.append(i)
+    action = 'none'
+    print('additional cards received are: ', new_cards)
+
   error = 'No card can be played'
-  x = random.randrange(len(cards_ply_temp))
-  
-  card = cards_ply_temp[x]
-  while card[0] != card_laid[0] and card[1] != card_laid[1] and card[0] != 'black': 
 
-    if len(cards_ply_temp) == 0:
-      card = error
-      break
-
-    #elif card[0] == 'black':
-     # break
-
-    else:
-      x = random.randrange(len(cards_ply_temp))
-      card = cards_ply_temp[x]   
-      cards_ply_temp.remove(card)
-      #print('to check 1: ', card)
-      #print('to check remaining cards: ', cards_ply_temp)
-
-  #print('to check 2: ', card)
-
-  if card is not error:
-    cards_ply.remove(card)
+  while True:
     
-    if card[0] != 'black':
-      print('The card played by '+ str(player_name) +' is ' + str(card[1]) + ' of ' + str(card[0]))
-      card_laid = card
-      if card[1] == '+2':
-        if type(action) == int:
-          action += 2
-        else:  
-          action = 2
+      x = input('Insert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
+or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      elif card[1] == 'switch':
-          action = 'switch'
-      
-      elif card[1] == 'wait_a_round':
-        action = 'wait_a_round'
-
-    else:
-        print('The card played by '+ str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
-        while True:
-          
-          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
-          card_laid = card
-          
-          if color != "green" and color != "yellow" and color != "blue" and color != "red":
-            print("That's not a valid color!")
-            continue
-          else:
+      if len(x) == 1:
+        x = int(x)
+        if 0 <= x < len(cards_ply): 
+          card = cards_ply[x]
+          print('Your chosen card is ' + str(card[1]) + ' of ' + str(card[0]))
+          if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
+            
+            cards_ply.remove(card)   #  removes played card 
+            #print(cards_ply)
             break
+          else:
+            print('This card can´t be played')
+            continue
 
-        if card[1] == '+4':
+        else:
+          print('This input is not valid. Try again.')
+          continue
+      else:
+        if x == 'take':
+          card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
+          print('The card taken from deck is: ', card)
+          if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
+            print('The taken card could be laid successfully.')
+            
+          else:
+            print('Also the new card could not be played, therefore you have to pass')
+            cards_ply.append(card)
+            card = error
+          break
+
+        if x == 'take cards':
+          print('This input does not make sense here, as there were no +2/+4 played before!')
+          continue
+
+        else:
+          print('This input is not valid. Try again.')
+          continue
+    
+  if card == error:
+    return cards_ply, card_laid, shuffled_deck, color, action
+
+  if card[0] != 'black':
+
+    if card[1] == '+2':
+      if type(action) == int:
+        action += 2
+      else:  
+        action = 2
+      
+    elif card[1] == 'switch':
+        action = 'switch'
+    
+    elif card[1] == 'wait_a_round':
+      action = 'wait_a_round'
+
+  else:
+
+    while True:
+      color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
+                  
+      if color == "green" or color == "yellow" or color == "blue" or color == "red":
+        #print('color seems correct')   # color input check 
+        break
+      else:
+        print("That's not a valid color!")
+        continue
+    
+    if card[1] == '+4':
             if type(action) == int:
               action += 4
             else:  
               action = 4
 
-    return cards_ply, card_laid, shuffled_deck, color, action 
+  
+  card_laid = card
 
-  else:
-    print(card)
-    print(str(player_name) + ' is taking a new card from deck')
-    
-        
-    card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
-    
-    print('The card taken from deck is: ', card)
-    
+  return cards_ply, card_laid, shuffled_deck, color, action
+  
 
-    if card[0] == card_laid[0] or card[1] == card_laid[1]:
-        print('The card played by ' + str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
-        card_laid = card
 
-        if card[1] == '+2':
-          action = 2
 
-        elif card[1] == 'switch':
-          action = 'switch'
-      
-        elif card[1] == 'wait_a_round':
-          action = 'wait_a_round'
-
-    elif card[0] == 'black':
-        
-        print('The card played by ' + str(player_name) + ' is ' + str(card[1]) + ' of ' + str(card[0]))
-        while True:
-          
-          color = input(str('What color do you choose? [type: "green", "yellow", "blue" or "red"]\nYour choice: '))
-          card_laid = card
-          
-          if color != "green" and color != "yellow" and color != "blue" and color != "red":
-            print("That's not a valid color!")
-            continue
-          else:
-            break
-
-        if card[1] == '+4':
-            action = 4
-
-    else:
-        cards_ply.append(card)
-        print('You can´t play. PASS')
-
-    return cards_ply, card_laid, shuffled_deck, color, action
       
                                                                              
 def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):  
