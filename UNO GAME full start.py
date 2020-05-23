@@ -58,9 +58,9 @@ def lay_first_card(shuffled_deck): # this function takes the first card from the
 
 def distribute_cards(shuffled_deck): # this function gives each player 7 cards from the shuffled deck
 
-  cards_comp = shuffled_deck[0:7]   #change this -> use a for loop. The cards should be distributed as one each
-  cards_ply = shuffled_deck[7:14]   # this makes the game more realistic
-  shuffled_deck = shuffled_deck[14:]   # NB here optimize
+  cards_comp = shuffled_deck[0:7]   # 7:14
+  cards_ply = shuffled_deck[7:9]  
+  shuffled_deck = shuffled_deck[14:]   
   return cards_comp, cards_ply, shuffled_deck
 
 def choose_starter(): # this function chooses the starter of the game and returns it: either player or computer
@@ -94,26 +94,24 @@ def display_player_cards(cards_ply):  # this function serves to tell the player 
 def display_addit_cards_received(new_cards): # this function serves to print the cards, after they are taken from deck, in a nicer way
                                              # it is also used to display the first card that is laid (very first card to start the game)
   show = []
-  if len(new_cards) == 2:
-    return '"{} of {}"'.format(new_cards[1], new_cards[0])
-  else:
-    for i in new_cards:
-      card = '{} of {}'.format(i[1], i[0])
-      show.append(card)
-    return show
+  
+  for i in new_cards:
+    card = '{} of {}'.format(i[1], i[0])
+    show.append(card)
+  return show
 
 
 def card_from_deck(shuffled_deck, card_laid, num = 1):  # this function is used to take one or more cards from deck
                                     # default: it gives out one. If more are needed it has to be specified with the input (the num)
   
  
-  print('the lenght of shuffled deck now is: ', len(shuffled_deck)) 
+  #print('the length of shuffled deck now is: ', len(shuffled_deck)) 
                              
   if len(shuffled_deck) == 0 or len(shuffled_deck) < num: 
                                     # this second condition is for the case that there are less cards remaining than 
              # the ones that need to be given out. If so the remaining cards get overwritten
-    #print('lenght:', len(cards_ply), 'cards of ply: ', cards_ply)  -> to be removed
-    #print('lenght:', len(cards_comp),'cards of comp: ', cards_comp)  -> to be removed
+    #print('length:', len(cards_ply), 'cards of ply: ', cards_ply)  -> to be removed
+    #print('length:', len(cards_comp),'cards of comp: ', cards_comp)  -> to be removed
     shuffled_deck = shuffle(deck) 
     
     for i in cards_comp:             # this and the following serve to remove from the new shuffled deck 
@@ -126,7 +124,7 @@ def card_from_deck(shuffled_deck, card_laid, num = 1):  # this function is used 
       card_laid = ['black', '+4']         # n.b. in case the laid card was a +4 black, as card_laid was already overwritten
       shuffled_deck.remove(card_laid)     # by the desired color, it has to be rewritten as ['black', '+4']
 
-    print('The deck was reshuffled. Its lenght is: ', len(shuffled_deck)) #maybe to be kept like this
+    print('The deck was reshuffled. Its length is: ', len(shuffled_deck)) #maybe to be kept like this
       
   
   if num == 1: # this is the default input value (this means when num is not specified)
@@ -166,7 +164,7 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
     for i in cards_comp:                                # The computer checks whether it can answer by also playing a +2 of the same (or the 
                                                         # deisred) color or a +4. If that is the case computer plays it (or randomly one 
                                                         # of the possible ones, in case of multiple possibilities)
-      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[1] == '+2' and i[1] == '+2':
+      if i[1] == '+4' or (i[0] == card_laid[0] and i[1] == '+2') or (card_laid[1] == '+2' and i[1] == '+2'):
         cards_to_answer.append(i)
     if len(cards_to_answer) != 0:
       x = random.randrange(len(cards_to_answer))
@@ -264,15 +262,28 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
       
     
     else:
-          x = random.randrange(4)   # computer randomly chooses a color after he laid a black card
-          if x == 0:
+          n_green = n_red = n_yellow = n_blue = 0 # computer chooses the most useful color after he laid a black card
+          for i in cards_comp:
+            if i[0] == 'green':
+              n_green += 1
+            elif i[0] == 'blue':
+              n_blue += 1
+            elif i[0] == 'red':
+              n_red += 1
+            elif i[0] == 'yellow':
+              n_yellow += 1
+            
+          nmax = max(n_green, n_red, n_yellow, n_blue)
+          if nmax == n_green:
             color = 'green'
-          elif x == 1:
+          elif nmax == n_yellow:
             color = 'yellow'
-          elif x == 2:
+          elif nmax == n_blue:
             color = 'blue'
           else:
             color = 'red'
+          
+          
           
           print('The played card by computer is "' + str(card[1]) + ' of ' + str(card[0]) + '" with desired color "' + color + '"')
           card_laid = card
@@ -315,12 +326,23 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
 
     elif card[0] == 'black':
 
-          x = random.randrange(4)
-          if x == 0:
+          n_green = n_red = n_yellow = n_blue = 0 # computer chooses the most useful color after he laid a black card
+          for i in cards_comp:
+            if i[0] == 'green':
+              n_green += 1
+            elif i[0] == 'blue':
+              n_blue += 1
+            elif i[0] == 'red':
+              n_red += 1
+            elif i[0] == 'yellow':
+              n_yellow += 1
+            
+          nmax = max(n_green, n_red, n_yellow, n_blue)
+          if nmax == n_green:
             color = 'green'
-          elif x == 1:
+          elif nmax == n_yellow:
             color = 'yellow'
-          elif x == 2:
+          elif nmax == n_blue:
             color = 'blue'
           else:
             color = 'red'
@@ -340,53 +362,72 @@ def comp_lays_card(cards_comp, card_laid, shuffled_deck, color, action):  # this
       
 
 
-def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action):  
-  
- # card_played = int(input('Insert the number of the card you want to play: '))
-# print("You played " + str(name_cards_ply[card_played]))
-  # card_played = int(input('Insert the number of the card you want to play: '))
-# print("You played " + str(name_cards_ply[card_played]))
+def ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last):  
 
-  #print('card laid is: ', card_laid)
-    
+
+  if len(cards_ply) == 1:
+    if last != 'UNO':
+      print('You did not say UNO! As punishement you receive two additional cards')
+      new_cards, shuffled_deck = card_from_deck(shuffled_deck, card_laid, 2)
+      for i in new_cards:
+        cards_ply.append(i)
+      new_cards_pr = display_addit_cards_received(new_cards)
+      print('additional cards received are: ', new_cards_pr)
+
+    else:
+      print('You said UNO successfully') #just to debug
+  
   if color != 'none':
-    card_laid = [color, ' '] # ' ' to be removed?
+    card_laid = [color, ' '] 
     color = 'none'
 
  
   if action == 'switch':
     print('the playing direction has been switched, therefore computer plays again')
     action = 'none'
-    return cards_ply, card_laid, shuffled_deck, color, action 
+    return cards_ply, card_laid, shuffled_deck, color, action, last
 
   elif action == 'wait_a_round':
     print('you have been skipped, therefore computer plays again')
     action = 'none'
-    return cards_ply, card_laid, shuffled_deck, color, action 
+    return cards_ply, card_laid, shuffled_deck, color, action, last 
 
   
 
   card = []
 
-  
+  last_maybe = ''
 
   if type(action) == int:
 
     cards_to_answer = []
     for i in cards_ply:
-      if i[1] == '+4' or i[0] == card_laid[0] and i[1] == '+2' or card_laid[1] == '+2' and i[1] == '+2':  # control this
+      if i[1] == '+4' or (i[0] == card_laid[0] and i[1] == '+2') or (card_laid[1] == '+2' and i[1] == '+2'):  # control this
         cards_to_answer.append(i)
-    print('Checking possible cards to answer:', cards_to_answer) ### just for debugging
+    #print('Checking possible cards to answer:', cards_to_answer) ### just for debugging
 
 
-    print(display_player_cards(cards_ply))
-
-    while True:
     
+
+    
+    while True:
+
+      print(display_player_cards(cards_ply))
+      print('The last laid card is: ', display_addit_cards_received(card_laid))
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      if len(x) == 1 or len(x) == 2:
+      if len(cards_ply) == 2 and not x in ['take cards', 'take']  and not x.isdigit():
+        y = x.split(' ')
+        if len(y) == 2 and y[0].isdigit() and y[1] == 'UNO':
+          last_maybe = 'UNO'
+          x = y[0]
+        else:
+          print('This input is not valid. Try again.')
+          continue
+
+
+      if x.isdigit():
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
@@ -434,21 +475,32 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
 
 
   
-  #if card[0] != 'black' and card[1] != '+2':
+  
 
   
 
   error = 'No card can be played'
-  print(display_player_cards(cards_ply))
+  #print(display_player_cards(cards_ply))
 
   if card == []:
 
     while True:
       
+      print(display_player_cards(cards_ply))
+      print('The last laid card is: ', display_addit_cards_received(card_laid))
       x = input('\nInsert the number of the card you want to play, "take" if you can´t play and need a new card from deck,\n\
 or "take cards" if you have to take multiple cards from the deck (in case one/multiple +2/+4 was/were laid before): ')
       
-      if len(x) == 1 or len(x) == 2:
+      if len(cards_ply) == 2 and not x in ['take cards', 'take']  and not x.isdigit():
+        y = x.split(' ')
+        if len(y) == 2 and y[0].isdigit() and y[1] == 'UNO':
+          last_maybe = 'UNO'
+          x = y[0]
+        else:
+          print('This input is not valid. Try again.')
+          continue
+      if x.isdigit():
+
         x = int(x)
         if 0 <= x < len(cards_ply): 
           card = cards_ply[x]
@@ -468,7 +520,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
       else:
         if x == 'take':
           card, shuffled_deck = card_from_deck(shuffled_deck, card_laid)
-          card_pr = display_addit_cards_received(card)
+          card_pr = display_addit_cards_received([card])
           print('The card taken from deck is: ', card_pr)
           if card[0] == card_laid[0] or card[1] == card_laid[1] or card[0] == 'black':
             print('The taken card could be laid successfully.')
@@ -488,7 +540,7 @@ or "take cards" if you have to take multiple cards from the deck (in case one/mu
           continue
     
   if card == error:
-    return cards_ply, card_laid, shuffled_deck, color, action
+    return cards_ply, card_laid, shuffled_deck, color, action, last
 
   if card[0] != 'black':
 
@@ -542,7 +594,15 @@ as punishement you get two additional cards!')
   
   card_laid = card
 
-  return cards_ply, card_laid, shuffled_deck, color, action
+  last = 'none'
+
+  if last_maybe == 'UNO':
+    if len(cards_ply) == 1:
+      last = last_maybe
+    else:
+      print('You wrote UNO, however you have more than one card left!!')
+
+  return cards_ply, card_laid, shuffled_deck, color, action, last
   
 
 
@@ -557,7 +617,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
                                                 # with 0 cards -> he won
     #print('###################################################')
     print('\n')
-    cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, first_card, shuffled_deck, color='none', action='none')
+    cards_ply, card_laid, shuffled_deck, color, action, last = ply_lays_card(cards_ply, first_card, shuffled_deck, color='none', action='none', last='none')
     print('\n')
     #print('--------------------------------------------------')
     #print('\n')
@@ -572,7 +632,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
     print('\n')
     #print('--------------------------------------------------')
     #print('\n')
-    cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
+    cards_ply, card_laid, shuffled_deck, color, action, last = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last='none')
     mode = 2
     #print('###################################################')
     print('\n')
@@ -581,7 +641,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
 
     if mode == 1:
       
-      cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)  
+      cards_ply, card_laid, shuffled_deck, color, action, last = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last)  
       if len(cards_ply) == 0:
         winner = 'ply'
         print('\nCongratulations ' + str(player_name) + '! You have won!')
@@ -614,7 +674,7 @@ def play_game(starter, shuffled_deck, first_card, cards_ply, cards_comp):
       #print('--------------------------------------------------')
       #print('\n')
 
-      cards_ply, card_laid, shuffled_deck, color, action = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action)
+      cards_ply, card_laid, shuffled_deck, color, action, last = ply_lays_card(cards_ply, card_laid, shuffled_deck, color, action, last)
       if len(cards_ply) == 0:
         winner = 'ply'
         print('\nCongratulations ' + str(player_name) + '! You have won!')
@@ -670,7 +730,7 @@ while play == 'yes':
 
   #print('The first card is: ', first_card)
 
-  first_card_pr = display_addit_cards_received(first_card)
+  first_card_pr = display_addit_cards_received([first_card])
   print('\nThe first card is: ', first_card_pr)
 
 
